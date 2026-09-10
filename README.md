@@ -12,7 +12,7 @@ A practical introduction to GitOps, ArgoCD, and the extended Argo ecosystem with
 - [Why ArgoCD?](#-why-argocd)
 - [🗺️ Step-by-Step Learning Roadmap](#%EF%B8%8F-step-by-step-learning-roadmap)
   - [Phase 1: Fundamentals & Core Setup](#phase-1-fundamentals--core-setup)
-  - [Phase 2: Day-2 Automation & Monitoring](#phase-2-day-2-automation--monitoring)
+  - [Phase 2: Automation & Monitoring](#phase-2-automation--monitoring)
   - [Phase 3: Security & The Argo Suite](#phase-3-security--the-argo-suite)
   - [Phase 4: Real-World Architecture](#phase-4-real-world-architecture)
 
