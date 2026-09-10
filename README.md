@@ -1,22 +1,20 @@
-# 🚀 GitOps & ArgoCD for Kubernetes
+# 🚀 GitOps & ArgoCD Masterclass
 
-A practical introduction to GitOps and ArgoCD with real-world examples, production scenarios, and Kubernetes deployment workflows.
+A practical introduction to GitOps, ArgoCD, and the extended Argo ecosystem with real-world examples, production scenarios, and step-by-step Kubernetes deployment workflows.
 
 ---
 
 ## 📖 Table of Contents
 
 - [What is GitOps?](#-what-is-gitops)
-  - [Real-Life Example](#real-life-example)
-  - [Simple Analogy](#simple-analogy)
 - [GitOps Principles](#-gitops-principles)
 - [GitOps vs Traditional CI/CD](#-gitops-vs-traditional-cicd)
 - [Why ArgoCD?](#-why-argocd)
-  - [Tool Comparison Matrix](#tool-comparison-matrix)
-- [ArgoCD Architecture](#-argocd-architecture)
-- [Key ArgoCD Concepts](#-key-argocd-concepts)
-- [Practical Production Workflow](#-practical-production-workflow)
-- [Key Takeaways](#-key-takeaways)
+- [🗺️ Step-by-Step Learning Roadmap](#%EF%B8%8F-step-by-step-learning-roadmap)
+  - [Phase 1: Fundamentals & Core Setup](#phase-1-fundamentals--core-setup)
+  - [Phase 2: Day-2 Automation & Monitoring](#phase-2-day-2-automation--monitoring)
+  - [Phase 3: Security & The Argo Suite](#phase-3-security--the-argo-suite)
+  - [Phase 4: Real-World Architecture](#phase-4-real-world-architecture)
 
 ---
 
@@ -28,8 +26,8 @@ Imagine your team runs a customer-facing application on Kubernetes.
 - Developers push code to Git.
 - CI builds a Docker image.
 - Someone manually updates Kubernetes manifests.
-- Engineers execute deployment commands.
-- Nobody is fully certain what is running in production.
+- Engineers execute deployment commands (`kubectl apply`).
+- Nobody is fully certain what version is actually running in production.
 
 **GitOps solves this problem.** It is an operational model where **Git becomes the single source of truth** for both infrastructure and application deployments.
 
@@ -37,30 +35,12 @@ Imagine your team runs a customer-facing application on Kubernetes.
 Changes Committed to Git ➔ Pull Request Reviewed ➔ ArgoCD Detects Changes ➔ Cluster Synchronized
 ```
 
-### Real-Life Example
-Your e-commerce platform needs to increase replicas from **3 to 5**.
-
-#### Without GitOps
-```bash
-kubectl scale deployment web-app --replicas=5
-```
-* **Problems:** No review process, no audit trail, configuration drift, and difficult troubleshooting.
-
-#### With GitOps
-Developer updates the manifest configuration:
-```yaml
-spec:
-  replicas: 5
-```
-* **Workflow:** `Git Commit` ➔ `Pull Request` ➔ `Approval & Merge` ➔ `ArgoCD Sync` ➔ `Cluster Updated`.
-* **Advantages:** Fully auditable, peer-reviewed, version-controlled, and easily reversible.
-
 ### Simple Analogy
 * **Git** = Approved Building Blueprint
 * **ArgoCD** = Site Supervisor
 * **Kubernetes** = Construction Site
 
-If someone modifies the building without approval, the supervisor compares it with the blueprint and restores the approved design.
+If someone modifies the live building without approval, the supervisor compares it with the blueprint and restores the approved design automatically.
 
 ---
 
@@ -105,71 +85,26 @@ ArgoCD is a Kubernetes-native GitOps platform. It continuously checks what *shou
 
 ---
 
-## 🏗️ ArgoCD Architecture
+## 🗺️ Step-by-Step Learning Roadmap
 
-```text
-               +--------------------+
+Follow the folders sequentially to move from GitOps absolute beginner to an advanced production engineer.
 
-               |      Git Repo      |
-               +---------+----------+
-                         |
-                         v
-               +--------------------+
+### Phase 1: Fundamentals & Core Setup
+* **[Intro_argocd](./Intro_argocd):** Introduction to core GitOps concepts, internal architecture components, and vocabulary.
+* **[argocd_setup](./argocd_setup):** Step-by-step guides for installing ArgoCD via manifests/Helm, exposing the UI, and initial authentication.
+* **[app_deployment](./app_deployment):** Deploying your first declarative application using Helm, Kustomize, and raw manifests.
+* **[argocd_features](./argocd_features):** Deep dive into Sync Policies, Pruning, Self-Healing, and dealing with Configuration Drift.
 
-               |    Repo Server     |
-               +---------+----------+
-                         |
-                         v
-               +--------------------+
+### Phase 2: Day-2 Automation & Monitoring
+* **[argocd_notifications](./argocd_notifications):** Configuring real-time alerts to Slack, Microsoft Teams, or Email when sync states change.
+* **[argocd_image_updater](./argocd_image_updater):** Automating container image updates directly to Git when new images land in container registries.
+* **[argocd_monitoring](./argocd_monitoring):** Setting up Prometheus metrics, Grafana dashboards, and monitoring ArgoCD cluster health.
 
-               | Application Ctrl   |
-               +---------+----------+
-                         |
-                         v
-               +--------------------+
+### Phase 3: Security & The Argo Suite
+* **[argocd_security](./argocd_security):** Multi-tenancy configurations, setting up RBAC policies, Single Sign-On (SSO), and high availability scaling.
+* **[argocd_rollouts](./argocd_rollouts):** Implementing advanced deployment strategies like Canary releases and Blue/Green deployments.
+* **[argocd_workflows](./argocd_workflows):** Orchestrating container-native workflows and parallel task pipelines inside Kubernetes.
+* **[argocd_events](./argocd_events):** Event-driven automation to trigger workflows based on Webhooks, S3 events, or Git changes.
 
-               | Kubernetes Cluster |
-               +--------------------+
-                         ^
-                         |
-               [API Server / UI / CLI]
-```
-
-- **Repository Server:** Pulls manifests from Git and processes Helm charts or Kustomize configurations to generate raw Kubernetes manifests.
-- **Application Controller:** The core engine. It compares desired state vs actual state, monitors cluster health, and performs self-healing rollbacks.
-- **API Server:** Powering the Web UI Dashboard, CLI, and REST API while enforcing strict user RBAC and SSO configurations.
-
----
-
-## 🔑 Key ArgoCD Concepts
-
-* **Application:** A logical deployable unit linking a target Git repository source to a specific Kubernetes cluster namespace.
-* **Project:** Groups related applications together to enforce safe logical boundaries, RBAC permissions, and allowed target namespaces.
-* **Health Statuses:** 
-  - `Healthy`: Running correctly.
-  - `Progressing`: Deployment or rolling upgrade in progress.
-  - `Degraded`: Failure or crash-loop issue detected.
-  - `Missing`/`Suspended`: Resource is absent or operation is explicitly paused.
-
----
-
-## ⚡ Practical Production Workflow
-
-```text
-Dev Change ➔ Git Commit ➔ PR Review ➔ Merge ➔ ArgoCD Drift Detection ➔ Sync ➔ Health Validation ➔ Live
-```
-
-### Drift Detection Scenario
-If an engineer manually overrides a production container sizing on the fly:
-```bash
-kubectl scale deployment payment-service --replicas=10
-```
-ArgoCD immediately flags the state as `OutOfSync`. Within moments, its automated controller overrides the manual drift and brings the configuration back down to the Git-approved state (`replicas: 3`).
-
----
-
-## 📌 Key Takeaways
-
-- **Git is the Ultimate Source of Truth** for applications and underlying infrastructure alike.
-- **Security is Enhanced** by pulling changes from inside the cluster instead of pushing from external CI pipelines.
-- **Downtime Minimization** is achieved through instantaneous declarative self-healing and version-controlled rollbacks.
+### Phase 4: Real-World Architecture
+* **[argocd_project](./argocd_project):** A complete, production-grade end-to-end project uniting the entire Argo suite in a secure multi-environment pipeline.
