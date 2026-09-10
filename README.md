@@ -6,13 +6,15 @@ A practical introduction to GitOps and ArgoCD with real-world examples, producti
 
 # 📖 Table of Contents
 
-- [What is GitOps?](#what-is-gitops)
-s
-- #gitops-vs-traditional-cicd
-- [Why ArgoCD?](#why-argvs FluxCD vs Jenkins X](#argocd-vs-fluxcd-vs-jen#key-argocd-concepts
-- [Practical Production Workflow](#practicalaways](#key-takeaways)
-
-tOps?
+# What is GitOps?
+# GitOps Principles
+# GitOps vs Traditional CI/CD
+# Why ArgoCD?
+# ArgoCD vs FluxCD vs Jenkins X
+# ArgoCD Architecture
+# Key ArgoCD Concepts
+# Practical Production Workflow
+# Key Takeaways
 
 Imagine your team runs a customer-facing application on Kubernetes.
 
